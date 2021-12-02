@@ -38,20 +38,10 @@ func main() {
 		}
 	}()
 
-	gqlServer, err := graphql.NewServer()
-	go func() {
-		defer wg.Done()
-		err = gqlServer.Run(":8082")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	}()
-
 	gqlRouter, err := graphql.GetRouter()
 	go func() {
 		defer wg.Done()
-		err = gqlRouter.Run(":8083")
+		err = gqlRouter.Run(":8081")
 		if err != nil {
 			fmt.Println(err)
 			return
