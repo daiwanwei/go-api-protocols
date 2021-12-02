@@ -1,0 +1,139 @@
+basePath: /
+definitions:
+  rest.DataResp:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  rest.NonDataResp:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+    type: object
+  services.CreateUserDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  services.LoginDto:
+    properties:
+      password:
+        type: string
+      userName:
+        type: string
+    type: object
+  services.PassportDto:
+    properties:
+      authorities:
+        items:
+          type: string
+        type: array
+      token:
+        type: string
+      userId:
+        type: string
+    type: object
+  services.UserDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      userId:
+        type: string
+      userName:
+        type: string
+    type: object
+info:
+  contact:
+    email: wadejet.work@gmail.com
+    name: API Support
+  description: Swagger API for Golang Project Blueprint.
+  license:
+    name: MIT
+  termsOfService: http://swagger.io/terms/
+  title: Swagger API
+  version: "1.0"
+paths:
+  /rest/auth/login:
+    post:
+      parameters:
+      - description: 登入Dto
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/services.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功後返回的值
+          schema:
+            allOf:
+            - $ref: '#/definitions/rest.DataResp'
+            - properties:
+                data:
+                  $ref: '#/definitions/services.PassportDto'
+              type: object
+      summary: 登入
+      tags:
+      - auth
+  /rest/user/createUser:
+    post:
+      parameters:
+      - description: 租客註冊資料
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/services.CreateUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功後返回的值
+          schema:
+            $ref: '#/definitions/rest.NonDataResp'
+      summary: 建立會員
+      tags:
+      - user
+  /rest/user/findUser:
+    get:
+      parameters:
+      - description: search by userId
+        in: query
+        name: userId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功後返回的值
+          schema:
+            allOf:
+            - $ref: '#/definitions/rest.DataResp'
+            - properties:
+                data:
+                  $ref: '#/definitions/services.UserDto'
+              type: object
+      summary: 取得會員
+      tags:
+      - user
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
