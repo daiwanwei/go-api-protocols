@@ -3,6 +3,7 @@
 
  * [專案描述](#專案描述)
  * [執行專案](#執行專案)
+ * [修改專案](#修改專案)
 
 ## 專案描述
 
@@ -40,4 +41,16 @@ http://{host}/swagger/index.html
 ```bash
 #網址打入(default host=>localhost:8081)
 http://{host}/graphql
+```
+
+## 修改專案
+### 修改rest
+```bash
+#refresh swagger doc
+swag init
+```
+### 修改graphQL
+```bash
+#refresh schema
+go run github.com/99designs/gqlgen generate 
 ```
