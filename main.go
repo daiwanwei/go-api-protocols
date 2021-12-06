@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-api-protocols/adapter/graphql"
+	"go-api-protocols/adapter/jsonrpc/routers"
 	restRouters "go-api-protocols/adapter/rest/routers"
 	_ "go-api-protocols/docs"
 	"sync"
@@ -39,9 +40,26 @@ func main() {
 	}()
 
 	gqlRouter, err := graphql.GetRouter()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
 	go func() {
 		defer wg.Done()
 		err = gqlRouter.Run(":8081")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}()
+	jsonRpcRouter, err := routers.GetRouter()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	go func() {
+		defer wg.Done()
+		err = jsonRpcRouter.Run(":8082")
 		if err != nil {
 			fmt.Println(err)
 			return

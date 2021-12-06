@@ -1,6 +1,7 @@
 package graphql
 
 import (
+	"fmt"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi/v5"
@@ -57,6 +58,7 @@ func newRouter() (*router, error) {
 }
 
 func (r *router) Run(address string) error {
+	fmt.Printf("[gql-Debug] Listening and serving HTTP on %s\n", address)
 	err := http.ListenAndServe(address, r)
 	if err != nil {
 		return err
