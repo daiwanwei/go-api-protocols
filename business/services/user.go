@@ -57,7 +57,7 @@ type UserServiceError struct {
 }
 
 func NewUserServiceError(e ServiceEvent) error {
-	return &UserServiceError{ServiceError{ServiceName: "UserService", Code: e.GetEvent().Code, Msg: e.GetEvent().Msg, Err: nil}}
+	return &UserServiceError{ServiceError{ServiceName: "wrapUserService", Code: e.GetEvent().Code, Msg: e.GetEvent().Msg, Err: nil}}
 }
 
 var users = []UserDto{

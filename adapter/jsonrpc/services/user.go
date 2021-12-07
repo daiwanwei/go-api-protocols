@@ -20,7 +20,7 @@ func NewUserService() (*UserService, error) {
 	}, nil
 }
 
-func (service *UserService) FindAllUser(r *http.Request, args *FindAllUserArgs, reply *UserList) error {
+func (service *UserService) FindAllUser(r *http.Request, args *FindAllUserArgs, reply *UserListReply) error {
 	users, err := service.User.FindAllUser(context.Background())
 	if err != nil {
 		return err
@@ -29,7 +29,21 @@ func (service *UserService) FindAllUser(r *http.Request, args *FindAllUserArgs, 
 	return nil
 }
 
+func (service *UserService) FindUser(r *http.Request, args *FindUserArgs, reply *UserReply) error {
+	user, err := service.User.FindUserByID(context.Background(), args.Id)
+	if err != nil {
+		return err
+	}
+	*reply = UserReply(*user)
+	return nil
+}
+
 type FindAllUserArgs struct {
 }
 
-type UserList []services.UserDto
+type FindUserArgs struct {
+	Id string `json:"id"`
+}
+
+type UserListReply []services.UserDto
+type UserReply services.UserDto

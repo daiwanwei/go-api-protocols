@@ -72,5 +72,5 @@ type AuthServiceError struct {
 }
 
 func NewAuthServiceError(e ServiceEvent) error {
-	return &AuthServiceError{ServiceError{ServiceName: "UserService", Code: e.GetEvent().Code, Msg: e.GetEvent().Msg, Err: nil}}
+	return &AuthServiceError{ServiceError{ServiceName: "wrapUserService", Code: e.GetEvent().Code, Msg: e.GetEvent().Msg, Err: nil}}
 }

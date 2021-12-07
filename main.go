@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"go-api-protocols/adapter/graphql"
-	"go-api-protocols/adapter/jsonrpc/routers"
+	"go-api-protocols/adapter/grpc"
+	"go-api-protocols/adapter/jsonrpc"
 	restRouters "go-api-protocols/adapter/rest/routers"
+	"go-api-protocols/clients"
 	_ "go-api-protocols/docs"
 	"sync"
+	"time"
 )
 
 // @title Swagger API
@@ -24,7 +27,7 @@ import (
 // @BasePath /
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(3)
+	wg.Add(4)
 	restRouter, err := restRouters.GetRouter()
 	if err != nil {
 		fmt.Println(err)
@@ -32,7 +35,7 @@ func main() {
 	}
 	go func() {
 		defer wg.Done()
-		err = restRouter.Run(":8080")
+		err = restRouter.Run(":8081")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -46,24 +49,62 @@ func main() {
 	}
 	go func() {
 		defer wg.Done()
-		err = gqlRouter.Run(":8081")
+		err = gqlRouter.Run(":8082")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 	}()
-	jsonRpcRouter, err := routers.GetRouter()
+
+	jsonRpcRouter, err := jsonrpc.GetRouter()
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
 	}
 	go func() {
 		defer wg.Done()
-		err = jsonRpcRouter.Run(":8082")
+		err = jsonRpcRouter.Run(":8083")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 	}()
+
+	grpcRouter, err := grpc.GetRouter()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	go func() {
+		defer wg.Done()
+		err = grpcRouter.Run(":8084")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println("grpc router close")
+	}()
+	time.Sleep(time.Second * 3)
+	jsonRpcClient, err := clients.NewJsonRpcClient()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	err = jsonRpcClient.Execute()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	grpcClient, err := clients.NewGrpcClient()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	err = grpcClient.Execute()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
 	wg.Wait()
 }

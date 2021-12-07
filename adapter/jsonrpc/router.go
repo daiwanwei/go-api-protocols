@@ -1,4 +1,4 @@
-package routers
+package jsonrpc
 
 import (
 	"fmt"
