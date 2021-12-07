@@ -43,6 +43,12 @@ http://{host}/swagger/index.html
 http://{host}/graphql
 ```
 
+#### g-RPC API文檔
+需要先安裝[grpcui](https://github.com/fullstorydev/grpcui)
+```bash
+grpcui -plaintext {host}
+```
+
 ## 修改專案
 ### 修改rest
 ```bash
@@ -54,3 +60,10 @@ swag init
 #refresh schema
 go run github.com/99designs/gqlgen generate 
 ```
+
+### 修改protocol buffer
+需要先安裝[proto compiler](https://grpc.io/docs/protoc-installation/)
+```bash
+#refresh protocol buffer
+protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative protos/*.proto 
+``` 

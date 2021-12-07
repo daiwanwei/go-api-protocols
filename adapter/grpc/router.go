@@ -4,6 +4,7 @@ import (
 	"fmt"
 	pb "go-api-protocols/protos"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"net"
 )
 
@@ -32,6 +33,7 @@ func newRouter() (router *Router, err error) {
 		return nil, err
 	}
 	pb.RegisterUserServiceServer(server, user)
+	reflection.Register(server)
 	return &Router{
 		server,
 	}, nil

@@ -330,10 +330,10 @@ var file_protos_user_proto_goTypes = []interface{}{
 var file_protos_user_proto_depIdxs = []int32{
 	4, // 0: UserListResponse.users:type_name -> User
 	4, // 1: UserResponse.user:type_name -> User
-	0, // 2: wrapUserService.FindAllUser:input_type -> FindAllUserRequest
-	1, // 3: wrapUserService.FindUser:input_type -> FindUserRequest
-	2, // 4: wrapUserService.FindAllUser:output_type -> UserListResponse
-	3, // 5: wrapUserService.FindUser:output_type -> UserResponse
+	0, // 2: UserService.FindAllUser:input_type -> FindAllUserRequest
+	1, // 3: UserService.FindUser:input_type -> FindUserRequest
+	2, // 4: UserService.FindAllUser:output_type -> UserListResponse
+	3, // 5: UserService.FindUser:output_type -> UserResponse
 	4, // [4:6] is the sub-list for method output_type
 	2, // [2:4] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -436,7 +436,7 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// UserServiceClient is the client API for wrapUserService service.
+// UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type UserServiceClient interface {
@@ -454,7 +454,7 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 
 func (c *userServiceClient) FindAllUser(ctx context.Context, in *FindAllUserRequest, opts ...grpc.CallOption) (*UserListResponse, error) {
 	out := new(UserListResponse)
-	err := c.cc.Invoke(ctx, "/wrapUserService/FindAllUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/UserService/FindAllUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -463,14 +463,14 @@ func (c *userServiceClient) FindAllUser(ctx context.Context, in *FindAllUserRequ
 
 func (c *userServiceClient) FindUser(ctx context.Context, in *FindUserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
 	out := new(UserResponse)
-	err := c.cc.Invoke(ctx, "/wrapUserService/FindUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/UserService/FindUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// UserServiceServer is the server API for wrapUserService service.
+// UserServiceServer is the server API for UserService service.
 type UserServiceServer interface {
 	FindAllUser(context.Context, *FindAllUserRequest) (*UserListResponse, error)
 	FindUser(context.Context, *FindUserRequest) (*UserResponse, error)
@@ -501,7 +501,7 @@ func _UserService_FindAllUser_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/wrapUserService/FindAllUser",
+		FullMethod: "/UserService/FindAllUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).FindAllUser(ctx, req.(*FindAllUserRequest))
@@ -519,7 +519,7 @@ func _UserService_FindUser_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/wrapUserService/FindUser",
+		FullMethod: "/UserService/FindUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).FindUser(ctx, req.(*FindUserRequest))
@@ -528,7 +528,7 @@ func _UserService_FindUser_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 var _UserService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "wrapUserService",
+	ServiceName: "UserService",
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
