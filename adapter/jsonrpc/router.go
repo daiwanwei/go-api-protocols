@@ -10,14 +10,14 @@ import (
 )
 
 var (
-	routerInstance *router
+	routerInstance *wrapRouter
 )
 
-type router struct {
-	*mux.Router
+type wrapRouter struct {
+	router *mux.Router
 }
 
-func GetRouter() (instance *router, err error) {
+func GetRouter() (instance *wrapRouter, err error) {
 	if routerInstance == nil {
 		instance, err = newRouter()
 		if err != nil {
@@ -28,7 +28,7 @@ func GetRouter() (instance *router, err error) {
 	return routerInstance, nil
 }
 
-func newRouter() (*router, error) {
+func newRouter() (*wrapRouter, error) {
 	r := mux.NewRouter()
 	s := rpc.NewServer()
 	s.RegisterCodec(json.NewCodec(), "application/json")
@@ -42,12 +42,12 @@ func newRouter() (*router, error) {
 		return nil, err
 	}
 	r.Handle("/rpc", s)
-	return &router{r}, nil
+	return &wrapRouter{r}, nil
 }
 
-func (r *router) Run(address string) error {
+func (wrap *wrapRouter) Run(address string) error {
 	fmt.Printf("[json-RPC-Debug] Listening and serving HTTP on %s\n", address)
-	err := http.ListenAndServe(address, r.Router)
+	err := http.ListenAndServe(address, wrap.router)
 	if err != nil {
 		return err
 	}
