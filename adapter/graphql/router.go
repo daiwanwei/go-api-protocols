@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	routerInstance *wrapRouter
+	routerInstance *router
 )
 
-type wrapRouter struct {
-	router chi.Router
+type router struct {
+	wrappedRouter chi.Router
 }
 
-func GetRouter() (instance *wrapRouter, err error) {
+func GetRouter() (instance *router, err error) {
 	if routerInstance == nil {
 		instance, err = newRouter()
 		if err != nil {
@@ -31,7 +31,7 @@ func GetRouter() (instance *wrapRouter, err error) {
 	return routerInstance, nil
 }
 
-func newRouter() (*wrapRouter, error) {
+func newRouter() (*router, error) {
 	r := chi.NewRouter()
 	middleware, err := middlewares.GetMiddleware()
 	if err != nil {
@@ -54,12 +54,12 @@ func newRouter() (*wrapRouter, error) {
 	)
 	r.Handle("/graphql", playground.Handler("GraphQL playground", "/graphql/query"))
 	r.Handle("/graphql/query", handlers)
-	return &wrapRouter{r}, nil
+	return &router{r}, nil
 }
 
-func (wrap *wrapRouter) Run(address string) error {
+func (r *router) Run(address string) error {
 	fmt.Printf("[gql-Debug] Listening and serving HTTP on %s\n", address)
-	err := http.ListenAndServe(address, wrap.router)
+	err := http.ListenAndServe(address, r.wrappedRouter)
 	if err != nil {
 		return err
 	}
