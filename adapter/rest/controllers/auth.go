@@ -28,7 +28,7 @@ func NewAuthController() (controller AuthController, err error) {
 // @produce application/json
 // @Param login body services.LoginDto true "登入Dto"
 // @Success 200 {object}  rest.DataResp{data=services.PassportDto} "成功後返回的值"
-// @router /rest/auth/login [post]
+// @Router /rest/auth/login [post]
 func (controller *authController) Login(ctx *gin.Context) {
 	login := services.LoginDto{}
 	if err := ctx.ShouldBindJSON(&login); err != nil {

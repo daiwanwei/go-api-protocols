@@ -31,7 +31,7 @@ func NewUserController() (controller UserController, err error) {
 // @produce application/json
 // @Param register body services.CreateUserDto true "租客註冊資料"
 // @Success 200 {object}  rest.NonDataResp "成功後返回的值"
-// @router /rest/user/createUser [post]
+// @Router /rest/user/createUser [post]
 func (controller *userController) CreateUser(ctx *gin.Context) {
 
 	register := services.CreateUserDto{}
@@ -49,7 +49,7 @@ func (controller *userController) CreateUser(ctx *gin.Context) {
 // @produce application/json
 // @Param userId query string false "search by userId"
 // @Success 200 {object}  rest.DataResp{data=services.UserDto} "成功後返回的值"
-// @router /rest/user/findUser [get]
+// @Router /rest/user/findUser [get]
 func (controller *userController) FindUser(ctx *gin.Context) {
 	user, err := controller.user.FindUserByID(context.TODO(), ctx.Query("userId"))
 	respondWithData(ctx, user, err)
