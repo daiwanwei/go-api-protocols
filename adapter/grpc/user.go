@@ -7,8 +7,9 @@ import (
 	pb "go-api-protocols/protos"
 )
 
-type wrapUserService struct {
-	services.UserService
+type UserService struct {
+	pb.UnimplementedUserServiceServer
+	wrapped services.UserService
 }
 
 func NewUserService() (pb.UserServiceServer, error) {
@@ -16,11 +17,14 @@ func NewUserService() (pb.UserServiceServer, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &wrapUserService{service.User}, nil
+	return &UserService{
+		UnimplementedUserServiceServer: pb.UnimplementedUserServiceServer{},
+		wrapped:                        service.User,
+	}, nil
 }
 
-func (wrap *wrapUserService) FindAllUser(ctx context.Context, req *pb.FindAllUserRequest) (res *pb.UserListResponse, err error) {
-	users, err := wrap.UserService.FindAllUser(context.Background())
+func (service *UserService) FindAllUser(ctx context.Context, req *pb.FindAllUserRequest) (res *pb.UserListResponse, err error) {
+	users, err := service.wrapped.FindAllUser(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -32,8 +36,8 @@ func (wrap *wrapUserService) FindAllUser(ctx context.Context, req *pb.FindAllUse
 	return res, nil
 }
 
-func (wrap *wrapUserService) FindUser(ctx context.Context, req *pb.FindUserRequest) (res *pb.UserResponse, err error) {
-	user, err := wrap.UserService.FindUserByID(context.Background(), req.Id)
+func (service *UserService) FindUser(ctx context.Context, req *pb.FindUserRequest) (res *pb.UserResponse, err error) {
+	user, err := service.wrapped.FindUserByID(context.Background(), req.Id)
 	if err != nil {
 		return nil, err
 	}
