@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  go-api-protocols:
+    image: go-api-protocols
+    ports:
+      - "8084:8084"
+
